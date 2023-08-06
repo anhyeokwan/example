@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h4>[[${list}]]</h4>
+    <hr>
+    <h4 th:text="${list}"></h4>
+
+    <ul>
+        <th:block th:each="str, status : ${list}">
+            <li>
+                <span th:text="${status.index + 1}"></span> -- <span th:text="${str}"></span>
+            </li>
+        </th:block>
+    </ul>
+
+    <ul>
+        <li th:each="str : ${list}" th:text="${str}"></li>
+    </ul>
+
+    <ul>
+        <th:block th:each="str : ${list}">
+            <li>[[${str}]]</li>
+        </th:block>
+    </ul>
+
+    <ul>
+        <th:block th:each="str,status : ${list}">
+            <li><span>[[${status.index + 1}]] -- [[${str}]]</span></li>
+        </th:block>
+    </ul>
+
+    <ul>
+        <th:block th:each="str, status : ${list}">
+            <li>
+                <span th:if="${status.odd}">ODD -- [[${str}]]</span>
+                <span th:unless="${status.odd}">EVEN -- [[${str}]]</span>
+            </li>
+        </th:block>
+    </ul>
+
+    <ul>
+        <th:block th:each="str, status : ${list}">
+            <li>
+                <span th:text="${status.odd} ? 'ODD --- ' + ${str} : 'EVEN ---' + ${str}"></span>
+            </li>
+        </th:block>
+    </ul>
+
+    <a th:href="@{/hello}">Go to /hello</a>
+    <br>
+    <a th:href="@{/hello(name='AAA', age=16)}">파라미터 /hello</a>
+    <br>
+    <a th:href="@{/hello(name='안형관', age=26)}">한글 파라미터 /hello</a>
+    <br>
+    <a th:href="@{/hello(types=${list}, age=16)}">배열 파라미터 /hello</a>
+</body>
+</html>
