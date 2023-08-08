@@ -3,7 +3,6 @@ package com.example.example.domain;
 import lombok.*;
 
 import javax.persistence.*;
-
 @Entity
 @Getter
 @Builder

@@ -1,6 +1,5 @@
 package com.example.example.repository;
 
-import com.example.example.BoardRepository;
 import com.example.example.domain.Board;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
