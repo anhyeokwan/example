@@ -22,4 +22,9 @@ public class Example {
 
     @Column(name = "auto_bike")
     private String auto_bike;
+
+    public void change(String car, String auto_bike) {
+        this.car = car;
+        this.auto_bike = auto_bike;
+    }
 }

@@ -36,7 +36,7 @@ public class BoardRepositoryTests {
     }
 
     @Test
-    public void testSelectOne(){
+    public void testSelectOne() {
         Long bno = 101L;
 
         Optional<Board> result = boardRepository.findById(bno);
@@ -44,12 +44,12 @@ public class BoardRepositoryTests {
         Board board = null;
         try {
             board = result.orElseThrow();
-        }catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
 
         }
         if (board == null) {
             log.info("해당하는 정보가 없습니다.");
-        }else{
+        } else {
             log.info(board);
         }
 
@@ -68,7 +68,7 @@ public class BoardRepositoryTests {
     }
 
     @Test
-    public void deleteTest(){
+    public void deleteTest() {
         Long bno = 1L;
 
         Optional<Board> result = boardRepository.findById(bno);
@@ -83,7 +83,7 @@ public class BoardRepositoryTests {
         if (board == null) {
             log.info("해당하는 정보가 없습니다.");
             return;
-        }else{
+        } else {
             boardRepository.deleteById(bno);
             log.info("삭제를 완료하였습니다.");
         }
@@ -95,10 +95,69 @@ public class BoardRepositoryTests {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
         Page<Board> result = boardRepository.findAll(pageable);
 
-        log.info("total count : " + result.getTotalElements());
-        log.info("total pages : " + result.getTotalPages());
-        log.info("page number : " + result.getNumber());
-        log.info("page size : " + result.getSize());
+        log.info("total count : " + result.getTotalElements()); // 전체 결과 데이터의 총 개수
+        log.info("total pages : " + result.getTotalPages());  // 필요한 페이지의 총 개수
+        log.info("page number : " + result.getNumber());  // 현재 페이지의 인덱스(0부터 시작)를 반환
+        log.info("page size : " + result.getSize());  // 한 페이지에 보여지는 항목의 개수
 
+    }
+
+    @Test
+    public void searchTest() {
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+        Page<Board> result = boardRepository.findByKeyword("..3", pageable);
+
+        log.info("result Size : " + result.getSize());
+
+    }
+
+    @Test
+    public void searchTest1() {
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+        boardRepository.search1(pageable);
+//        Page<Board> boardPage = boardRepository.search1(pageable);
+//
+//        if(boardPage.getTotalElements() <= 0){
+//            log.info("데이터가 없습니다.");
+//        }else{
+//            for (int i = 0; i < boardPage.getTotalElements(); i++) {
+//                Board board = boardPage.getContent().get(i);
+//                log.info("bno : " + board.getBno());
+//                log.info("title : " + board.getTitle());
+//                log.info("content : " + board.getContent());
+//                log.info("writer : " + board.getWriter());
+//            }
+//        }
+
+    }
+
+    @Test
+    public void searchAllTest() {
+
+        String[] types = {"t", "w", "c"};
+        String keyword = "1";
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+
+        Page<Board> boards = boardRepository.searchAll(types, keyword, pageable);
+
+        // 전체 페이지
+        log.info(boards.getTotalPages());
+
+        // 페이지 사이즈
+        log.info(boards.getSize());
+
+        // 페이지 번호
+        log.info(boards.getNumber());
+
+        // 이전 페이지 유무
+        log.info("이전페이지 유무 : " + boards.hasPrevious());
+
+        // 다음 페이지 유무
+        log.info("다음 페이지 유무 : " + boards.hasNext());
+
+        boards.getContent().forEach(board -> log.info(board));
     }
 }
