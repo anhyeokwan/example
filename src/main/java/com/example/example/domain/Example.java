@@ -27,4 +27,9 @@ public class Example {
         this.car = car;
         this.auto_bike = auto_bike;
     }
+
+    public String returnName(String str){
+        str = str + " : change_Chk";
+        return str;
+    }
 }

@@ -1,7 +1,15 @@
 package com.example.example.controller;
 
+import com.example.example.domain.Example;
+import com.example.example.repository.ExampleRepository;
+import com.example.example.service.ExampleService;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +25,9 @@ import java.util.stream.IntStream;
 @Controller
 @Log4j2
 public class SampleContoller {
+
+    @Autowired
+    private ExampleService exampleService;
 
     @GetMapping(value = "/hello")
     public void hello(Model model) {
@@ -75,5 +86,11 @@ public class SampleContoller {
     @GetMapping(value = "/ex/ex3")
     public void ex3(Model model) {
         model.addAttribute("arr", new String[]{"AAA", "BBB", "CCC"});
+    }
+
+    @GetMapping("/ex/chagneChk")
+    public void chagneChk(Model model, @PageableDefault(size=20, sort="idx",direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Example> exList = exampleService.selectAllExample(pageable);
+        model.addAttribute("arr", exList);
     }
 }
