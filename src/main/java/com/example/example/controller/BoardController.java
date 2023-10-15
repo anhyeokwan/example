@@ -74,7 +74,7 @@ public class BoardController {
                         FileOutputStream fos = new FileOutputStream(filePath + "/" +  fileName);
                         BufferedOutputStream bos = new BufferedOutputStream(fos);
 
-                        byte[] getBytes = multipartFile.getBytes();
+                        byte[] getBytes = new byte[1000000];
 
                         bos.write(getBytes);
                         bos.close();
