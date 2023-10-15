@@ -9,6 +9,9 @@
       <div class="card">
         <div class="card-header">
           Board List
+          <div th:style="${session.member == null ? 'display : none' : 'display : inline-block'}">
+            <button type="button" class="btn-primary" id="registerFrm">글쓰기</button>
+          </div>
         </div>
 
         <div class="card-body">
@@ -44,4 +47,7 @@
 
 <script layout:fragment="script" th:inline="javascript">
   console.log("script.......");
+  $("#registerFrm").on("click", function (){
+    location.href="/board/register"
+  });
 </script>

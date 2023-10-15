@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org/"
+      layout:decorate="~{layout/basic.html}">
+<head>
+  <meta charset="UTF-8">
+  <title>Board Register</title>
+
+  <style>
+    /*.btn-upload {
+      width: 150px;
+      height: 30px;
+      background: #fff;
+      border: 1px solid rgb(77,77,77);
+      border-radius: 10px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-upload:hover {
+       background: rgb(77,77,77);
+       color: #fff;
+     }*/
+
+    #file {
+      display: none;
+    }
+  </style>
+</head>
+
+<div layout:fragment="content">
+  <div class="row mt-3">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          Board Register
+        </div>
+
+        <div class="card-body">
+          <form method="post" id="registerFrm">
+            <div class="input-group mb-3">
+              <span class="input-group-text">Title</span>
+              <input type="text" name="title" class="form-control" placeholder="Title">
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">Content</span>
+              <textarea class="form-control col-sm-5" rows="5" name="content"></textarea>
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">Writer</span>
+              <input type="text" name="writer" class="form-control" placeholder="Writer" th:value="${session.member != null ? session.member.memberId : '로그인을 해주세요.'}">
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">Files</span>
+              <div class="float-end uploadHidden">
+                <label for="file">
+                  <div class="btn btn-primary uploadFileBtn">ADD FILE</div>
+                  <div>
+                    <ul id="fileList">
+                    </ul>
+                  </div>
+                </label>
+                <input type="file" name="file" id="file">
+              </div>
+            </div>
+
+            <div class="my-4">
+              <div class="float-end">
+                <button type="button" class="btn btn-primary submitBtn" th:style="${session.member != null ? 'inline-block' : 'hidden'}">Submit</button>
+                <button type="reset" class="btn btn-secondary">Reset</button>
+              </div>
+            </div>
+
+          </form>
+
+        </div> <!-- end card-body -->
+      </div> <!-- end card -->
+    </div> <!-- end col -->
+  </div> <!-- end row -->
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+  $("#file").on("change", function (){
+    let file = $("#file")[0].files[0];
+    console.log("file : " + file.name);
+
+    const li = $("<li>");
+    let fileName = "<span>" + file.name + "</span>";
+    li.append(fileName);
+    $("#fileList").append(li);
+  });
+
+  $(".submitBtn").on("click", function(){
+    $("#registerFrm").attr("enctype", "multipart/form-data");
+
+    const title = $("[name=title]").val();
+    const content = $("[name=content]").val();
+    const writer = $("[name=writer]").val();
+
+    const formData = new FormData();
+    formData.append("multipartFile", $("#file")[0].files[0]);
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("writer", writer);
+
+    $.ajax({
+      url : "/board/ajax/register",
+      type : "POST",
+      dataType : "JSON",
+      data : formData,
+      processData: false, // 중요: FormData 객체를 변환하지 않도록 설정
+      contentType: false, // 중요: 내용 형식을 false로 설정
+      success : function (data){
+        alert(data.code);
+        console.log("등록 확인");
+      }
+    })
+
+  });
+
+</script>

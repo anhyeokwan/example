@@ -5,6 +5,9 @@ import com.example.example.dto.BoardDTO;
 import com.example.example.dto.PageRequestDTO;
 import com.example.example.dto.PageResponseDTO;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public interface BoardService {
 
     Long register(BoardDTO boardDTO);
@@ -16,4 +19,6 @@ public interface BoardService {
     void remove(Long bno);
 
     PageResponseDTO<BoardDTO> list(PageRequestDTO pageRequestDTO);
+
+    HashMap<String, Object> boardSave(Map<String, Object> map);
 }

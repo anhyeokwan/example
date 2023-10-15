@@ -13,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -82,4 +84,50 @@ public class BoardServiceImpl implements BoardService{
                 .total(result.getNumberOfElements())
                 .build();
     }
+
+    @Override
+    public HashMap<String, Object> boardSave(Map<String, Object> map) {
+
+        HashMap<String, Object> resultMap = new HashMap<>();
+
+        String code = "200";
+        String message = "정상적으로 처리되었습니다.";
+
+        if (map == null) {
+            code = "500";
+            message = "처리 중 에러가 발생하였습니다.";
+        }else{
+            String title = (String) map.get("title");
+            String content = (String) map.get("content");
+            String writer = (String) map.get("writer");
+
+            if (title == "") {code = "503"; message = "필수값이 없습니다.(title)";}
+            else if(content == ""){code = "503"; message = "필수값이 없습니다.(content)";}
+            else if(writer == ""){code = "503"; message = "필수값이 없습니다.(writer)";}
+
+            if (code.equals("200")) {
+
+                // builder pattern
+                Board board = Board.builder()
+                        .title(title)
+                        .content(content)
+                        .writer(writer)
+                        .build();
+
+                Board boardRegister = boardRepository.save(board);
+
+                if (boardRegister == null) {
+                    code = "500";
+                    message = "처리 중 에러가 발생하였습니다.";
+                }
+
+            }
+
+        }
+        resultMap.put("code", code);
+        resultMap.put("message", message);
+
+        return resultMap;
+    }
+
 }

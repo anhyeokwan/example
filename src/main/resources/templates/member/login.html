@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org/"
+      layout:decorate="~{layout/basic.html}">
+
+<div layout:fragment="content">
+
+    <div class="card">
+        <div class="card-header">
+            <h1>로그인</h1>
+        </div>
+
+        <div class="card-body">
+            <form id="loginFrm">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">아이디</span>
+                    <input type="text" name="memberId" class="form-control" placeholder="아이디">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">비밀번호</span>
+                    <input type="text" name="memberPw" class="form-control" placeholder="비밀번호">
+                </div>
+
+                <div class="my-4">
+                    <div class="float-end">
+                        <button type="button" class="btn btn-primary submitBtn" onclick="login();">로그인</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+    function login() {
+        console.log("로그인 버튼 확인");
+        $("#loginFrm").attr("action", "/member/ajax/login");
+        $("#loginFrm").attr("target", "_self");
+
+        const option = {
+            type : "POST",
+            dataType : "JSON",
+            success : function (data){
+                if(data.code == "200"){
+                    location.href = "/board/list"
+                }else{
+                    alert(data.message);
+                }
+            }
+        };
+
+        $("#loginFrm").ajaxSubmit(option);
+    }
+
+</script>
